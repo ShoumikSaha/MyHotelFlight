@@ -177,9 +177,11 @@ def BookingConfirmationPage(request):
     HotelName = "Hotel Name: " + hotel[0].Hotel_Name
     InDate = "Check In: " + checkin
     OutDate = "Check Out: " + checkout
+    TotalNights = "Total Night(s): " + str(delta.days)
     RoomType = "Room Type: " + room[0].RoomType
     RoomPrice = "Price per Room: " + str(Price)
-    TotalPrice = "Total Amount: " + str(Price) + "x" + str(rooms) + "= " + str(TotalAmount)
+    TotalRoom = "Total Room(s): " + str(rooms)
+    TotalPrice = "Total Amount: " + str(Price) + "x" + str(delta.days) + "x" + str(rooms) + "= " + str(TotalAmount)
     BookAmount = "Booking Amount: " + str(PaidMoney)
     RestAmount = "More to Pay: " + str(MoneyToPay)
 
@@ -188,17 +190,19 @@ def BookingConfirmationPage(request):
     p.drawString(100, 580, Lname)
     p.drawString(100, 560, Contact)
 
-    p.drawString(100, 500, "Booking Information")
+    p.drawString(100, 510, "Booking Information")
     p.drawString(100, 480, HotelName)
     p.drawString(100, 460, InDate)
     p.drawString(100, 440, OutDate)
-    p.drawString(100, 420, RoomType)
-    p.drawString(100, 400, RoomPrice)
-    p.drawString(100, 380, TotalPrice)
-    p.drawString(100, 360, BookAmount)
-    p.drawString(100, 340, RestAmount)
+    p.drawString(100, 420, TotalNights)
+    p.drawString(100, 400, RoomType)
+    p.drawString(100, 380, RoomPrice)
+    p.drawString(100, 360, TotalRoom)
+    p.drawString(100, 340, TotalPrice)
+    p.drawString(100, 320, BookAmount)
+    p.drawString(100, 300, RestAmount)
 
-    p.drawString(100, 300, "This booking has been confirmed.")
+    p.drawString(100, 280, "This booking has been confirmed.")
 
     p.drawImage('./HotelFlight/static/booking/barcode.jpg', 400, 750, 6 * cm, 2 * cm)
     p.drawImage('./HotelFlight/static/booking/logo.jpg', 100, 750, 2 * cm, 2 * cm)
@@ -639,6 +643,51 @@ def FlightBookingConfirmationPage(request):
                 [adultCount, id2])
 
             flight2 = namedtuplefetchall(cursor)
+
+            print(FirstName)
+            print(LastName)
+
+            p = canvas.Canvas('./booking/pdfs/ex2.pdf')
+            p.drawString(250, 700, "Itinerary")
+            Fname = "First Name: " + FirstName
+            Lname = "Last Name: " + LastName
+            Contact = "Contact No.: " + Phone
+            HotelName = "Hotel Name: " + hotel[0].Hotel_Name
+            InDate = "Check In: " + checkin
+            OutDate = "Check Out: " + checkout
+            TotalNights = "Total Night(s): " + str(delta.days)
+            RoomType = "Room Type: " + room[0].RoomType
+            RoomPrice = "Price per Room: " + str(Price)
+            TotalRoom = "Total Room(s): " + str(rooms)
+            TotalPrice = "Total Amount: " + str(Price) + "x" + str(delta.days) + "x" + str(rooms) + "= " + str(
+                TotalAmount)
+            BookAmount = "Booking Amount: " + str(PaidMoney)
+            RestAmount = "More to Pay: " + str(MoneyToPay)
+
+            p.drawString(100, 620, "Personal Information")
+            p.drawString(100, 600, Fname)
+            p.drawString(100, 580, Lname)
+            p.drawString(100, 560, Contact)
+
+            p.drawString(100, 510, "Booking Information")
+            p.drawString(100, 480, HotelName)
+            p.drawString(100, 460, InDate)
+            p.drawString(100, 440, OutDate)
+            p.drawString(100, 420, TotalNights)
+            p.drawString(100, 400, RoomType)
+            p.drawString(100, 380, RoomPrice)
+            p.drawString(100, 360, TotalRoom)
+            p.drawString(100, 340, TotalPrice)
+            p.drawString(100, 320, BookAmount)
+            p.drawString(100, 300, RestAmount)
+
+            p.drawString(100, 280, "This booking has been confirmed.")
+
+            p.drawImage('./HotelFlight/static/booking/barcode.jpg', 400, 750, 6 * cm, 2 * cm)
+            p.drawImage('./HotelFlight/static/booking/logo.jpg', 100, 750, 2 * cm, 2 * cm)
+            p.showPage()
+            p.save()
+
             return render(request, "booking/flightbookingconfirmation.html",
                           {'flight': flight[0], 'aircompany': aircompany[0], 'flight2': flight2[0],
                            'aircompany2': aircompany2[0], 'form': form, 'hotelform': hotelform,
